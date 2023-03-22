@@ -3,6 +3,7 @@ package endpoints
 import (
 	"encoding/json"
 	"github.com/calebtracey/mind-your-business-api/external"
+	"github.com/calebtracey/models/pkg/response"
 	log "github.com/sirupsen/logrus"
 	"net/http"
 	"time"
@@ -22,17 +23,23 @@ import (
 // @Router       /api/v1/newUser [post]
 func (r *Router) NewUser() http.HandlerFunc {
 	return func(rw http.ResponseWriter, req *http.Request) {
-		var apiResponse *external.Response
-
 		sw := time.Now()
-		rw.Header().Set("Content-Type", "application/json")
+		apiRequest := new(external.ApiRequest)
 
-		if apiResponse = r.Service.NewUser(req.Context(), req.Body); apiResponse.Message.ErrorLog != nil {
-			log.Errorf("/newUser - %v", apiResponse.Message.ErrorLog)
+		if err := json.NewDecoder(req.Body).Decode(apiRequest); err != nil {
+			log.Errorf("NewUser: error: %v", err)
 		}
 
+		apiResponse := r.Service.NewUser(req.Context(), apiRequest)
+		statusCode := apiResponse.Message.ErrorLog.GetHTTPStatus(len(apiResponse.Details))
 		apiResponse.Message.AddMessageDetails(sw)
-		rw.WriteHeader(apiResponse.Message.ErrorLog.GetHTTPStatus(len(apiResponse.Details)))
-		_ = json.NewEncoder(rw).Encode(apiResponse)
+
+		if res, err := json.Marshal(apiResponse); err != nil {
+			log.Errorf("failed to marshal response; error: %s", err.Error())
+			statusCode = http.StatusInternalServerError
+		} else {
+			response.WriteHeader(rw, statusCode)
+			_, _ = rw.Write(res)
+		}
 	}
 }

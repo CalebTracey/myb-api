@@ -1,13 +1,17 @@
 package psql
 
-import "fmt"
+import (
+	"fmt"
+	"github.com/calebtracey/mind-your-business-api/external"
+)
 
 type MapperI interface {
-	PostgresExec() string
+	PostgresExec(request *external.ApiRequest) string
 }
 
 type Mapper struct{}
 
-func (m Mapper) PostgresExec() string {
-	return fmt.Sprintf(InsertExec, "users", "first_name", "caleb")
+func (m Mapper) PostgresExec(request *external.ApiRequest) string {
+	columns, values := ParseStructToSlices(request.Request.User)
+	return fmt.Sprintf(InsertExec, "users", columns, values)
 }

@@ -1,11 +1,19 @@
 package models
 
+import (
+	"github.com/jackc/pgx/v5/pgtype"
+	"time"
+)
+
 type User struct {
-	FirstName string `json:"FirstName,omitempty"`
-	LastName  string `json:"LastName,omitempty"`
-	Username  string `json:"Username,omitempty"`
-	Password  string `json:"Password,omitempty"`
-	Email     string `json:"Email,omitempty"`
-	Addr1     string `json:"Addr1,omitempty"`
-	Addr2     string `json:"Addr2,omitempty"`
+	ID           pgtype.UUID `json:"id,omitempty" db:"id"`
+	FirstName    string      `json:"firstName,omitempty" db:"first_name"`
+	LastName     string      `json:"lastName,omitempty" db:"last_name"`
+	Email        string      `json:"email,omitempty"  db:"email"`
+	Username     string      `json:"username,omitempty"  db:"username"`
+	Password     string      `json:"password,omitempty"  db:"password"`
+	Token        string      `json:"token,omitempty"  db:"token"`
+	RefreshToken string      `json:"refreshToken,omitempty"  db:"refresh_Token"`
+	CreatedAt    time.Time   `json:"createdAt"  db:"created_at"`
+	UpdatedAt    time.Time   `json:"updatedAt"  db:"updated_at"`
 }

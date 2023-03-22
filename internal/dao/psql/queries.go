@@ -1,3 +1,3 @@
 package psql
 
-const InsertExec = `insert into %s ('%s') values ('%s')`
+const InsertExec = `insert into %s ("%s") values ('%s')`

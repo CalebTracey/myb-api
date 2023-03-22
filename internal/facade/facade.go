@@ -9,7 +9,7 @@ import (
 )
 
 type ServiceI interface {
-	NewUser(ctx context.Context, params any) (resp *external.Response)
+	NewUser(ctx context.Context, apiRequest *external.ApiRequest) *external.Response
 }
 
 type Service struct {
@@ -17,15 +17,15 @@ type Service struct {
 	PsqlMapper psql.MapperI
 }
 
-func (s Service) NewUser(ctx context.Context, params any) (resp *external.Response) {
-	resp = new(external.Response)
+func (s Service) NewUser(ctx context.Context, apiRequest *external.ApiRequest) *external.Response {
+	resp := new(external.Response)
 	// TODO add request validation
 	// TODO parse params and map request query
 
-	if pgResp, pgErr := s.PsqlDAO.ExecContext(ctx, s.PsqlMapper.PostgresExec()); pgErr != nil {
-		resp.Message.ErrorLog = errorLog(pgErr, "NewUser")
+	if execResp, execErr := s.PsqlDAO.ExecContext(ctx, s.PsqlMapper.PostgresExec(apiRequest)); execErr != nil {
+		resp.Message.ErrorLog = errorLog(execErr, "NewUser")
 	} else {
-		log.Infoln(pgResp.Status)
+		log.Infoln(execResp.Status)
 	}
 
 	// TODO add response mapping
