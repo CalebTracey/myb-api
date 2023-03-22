@@ -5,6 +5,7 @@ go 1.20
 require (
 	github.com/NYTimes/gziphandler v1.1.1
 	github.com/calebtracey/config-yaml v1.0.12
+	github.com/calebtracey/models v0.0.0-20230322182804-bde4fbc4eccb
 	github.com/go-chi/chi/v5 v5.0.8
 	github.com/go-chi/cors v1.2.1
 	github.com/jackc/pgx/v5 v5.3.1
@@ -14,6 +15,10 @@ require (
 	github.com/swaggo/swag v1.8.11
 	golang.org/x/sync v0.1.0
 )
+
+replace github.com/calebtracey/models => /Users/calebtracey/Code/models
+
+replace github.com/calebtracey/config-yaml => /Users/calebtracey/Code/config-yaml
 
 require (
 	github.com/KyleBanks/depth v1.2.1 // indirect

@@ -8,25 +8,21 @@ import (
 )
 
 func init() {
-	log.Infoln("initializing...")
+	log.Infoln("=== MIND YOUR BUSINESS API ===")
 }
 
 type InitializerI interface {
-	Router(cfg *config.Config, svc *facade.Service) error
 	Database(cfg *config.Config, svc *facade.Service) error
 }
-type Initializer struct{}
 
-func (i *Initializer) Router(cfg *config.Config, svc *facade.Service) error {
-	log.Infoln("Router...")
-	return nil
-}
+type Initializer struct{}
 
 func (i *Initializer) Database(cfg *config.Config, svc *facade.Service) error {
 	if psqlService, err := cfg.Database(PostgresDB); err != nil {
 		return err
 	} else {
-		svc.PSQL = psql.DAO{Pool: psqlService.Pool}
+		svc.PsqlDAO = psql.DAO{Pool: psqlService.Pool}
+		svc.PsqlMapper = psql.Mapper{}
 	}
 	return nil
 }
