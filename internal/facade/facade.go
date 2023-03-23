@@ -21,7 +21,6 @@ func (s Service) NewUser(ctx context.Context, apiRequest *external.ApiRequest) *
 	resp := new(external.Response)
 	// TODO add request validation
 	// TODO parse params and map request query
-
 	if execResp, execErr := s.PsqlDAO.ExecContext(ctx, s.PsqlMapper.NewUserExec(apiRequest)); execErr != nil {
 		resp.Message.ErrorLog = errorLog(execErr, "NewUser")
 	} else {
@@ -29,7 +28,6 @@ func (s Service) NewUser(ctx context.Context, apiRequest *external.ApiRequest) *
 	}
 
 	// TODO add response mapping
-
 	return resp
 }
 
