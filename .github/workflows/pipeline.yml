@@ -1,0 +1,13 @@
+jobs:
+  test:
+    uses: jobs/test.yml
+  lint:
+    uses: jobs/lint.yml
+  analyze:
+    uses: jobs/codeql.yml
+  build:
+    uses: jobs/build.yml
+    needs: [test, lint, analyze]
+  push:
+    uses: jobs/push.yml
+    needs: build
