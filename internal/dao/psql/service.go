@@ -28,35 +28,6 @@ func (s DAO) ExecContext(ctx context.Context, exec string) (resp *external.ExecR
 	}
 }
 
-func ParseStructToSlices(obj any) ([]string, []string) {
-	var tags, values []string
-
-	obj = dereferencePointer(obj)
-	t := reflect.TypeOf(obj)
-	v := reflect.ValueOf(obj)
-	numFields := t.NumField()
-
-	for i := 0; i < numFields; i++ {
-		// 'db' struct tag field = db column name
-		field := v.Field(i)
-
-		if field.IsValid() {
-			tag := t.Field(i).Tag.Get(DatabaseStructTag)
-
-			switch field.Kind() {
-			case reflect.String:
-				if str := field.String(); str != "" {
-					tags = append(tags, tag)
-					values = append(values, wrapInSingleQuotes(field.String()))
-				}
-			default:
-			}
-		}
-	}
-
-	return tags, values
-}
-
 func dereferencePointer(obj any) any {
 	if reflect.ValueOf(obj).Kind() == reflect.Pointer {
 		obj = reflect.ValueOf(obj).Elem().Interface()
