@@ -9,4 +9,4 @@ jobs:
   workflow-ci:
     name: Go API Workflow CI - Template
     runs-on: ubuntu-latest
-    uses: calebtracey/devops/ci/.github/workflows/goAPI.yml
+    uses: calebtracey/devops/.github/workflows/goAPI.yml
