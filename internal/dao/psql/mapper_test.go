@@ -34,7 +34,7 @@ func TestMapper_PostgresExec(t *testing.T) {
 					},
 				},
 			},
-			want: "insert into users (\"[id first_name last_name email username password token refresh_Token created_at updated_at]\") values ('[{\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000 %!s(bool=false)} TEST TEST TEST TEST TEST TEST TEST 2023-03-22 10:30:00 +0000 UTC 2023-03-22 10:30:00 +0000 UTC]')",
+			want: mockExec,
 		},
 	}
 	for _, tt := range tests {
@@ -54,3 +54,5 @@ func getFakeTime() time.Time {
 	hour, min, sec := 10, 30, 0
 	return time.Date(year, month, day, hour, min, sec, 0, time.UTC)
 }
+
+const mockExec = `insert into users (first_name, last_name, email, username, password, token, refresh_Token) values ('TEST', 'TEST', 'TEST', 'TEST', 'TEST', 'TEST', 'TEST')`
