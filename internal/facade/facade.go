@@ -26,7 +26,6 @@ func (s Service) NewUser(ctx context.Context, apiRequest *external.ApiRequest) *
 	} else {
 		log.Infoln(execResp.Status)
 	}
-
 	// TODO add response mapping
 	return resp
 }
