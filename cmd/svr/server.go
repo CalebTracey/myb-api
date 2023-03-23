@@ -13,7 +13,7 @@ import (
 )
 
 func listenAndServe(addr string, handler http.Handler) error {
-	log.Infof("server UP and listening on PORT: %s", addr)
+	log.Infof("server listening on PORT: %s", addr)
 
 	srv := &http.Server{
 		Addr:         fmt.Sprintf(":%s", addr),

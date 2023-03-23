@@ -1,0 +1,10 @@
+{
+  "request": {
+    "user": {
+      "firstName": "bob",
+      "lastName": "barker",
+      "username": "bob1901",
+      "email": "bob.barker@gmail.com"
+    }
+  }
+}

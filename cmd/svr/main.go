@@ -5,17 +5,12 @@ import (
 	config "github.com/calebtracey/config-yaml"
 	"github.com/calebtracey/mind-your-business-api/internal/facade"
 	"github.com/calebtracey/mind-your-business-api/internal/routes"
+	_ "github.com/calebtracey/mind-your-business-api/internal/routes"
 	"github.com/calebtracey/mind-your-business-api/internal/routes/endpoints"
 	log "github.com/sirupsen/logrus"
 )
 
-const configPath = "dev_config.yaml"
-
-type Application struct {
-	Config      *config.Config
-	Initializer InitializerI
-	Router      endpoints.RouterI
-}
+const configPath = "config.yaml"
 
 //	@title			Mind Your Business API
 //	@version		1.0
@@ -38,27 +33,21 @@ type Application struct {
 // @in							header
 // @name						Authorization
 // @description				Description for what is this security definition being used
+//
+//go:generate swag init --outputTypes go,yaml --parseInternal
 func main() {
 	defer panicQuit()
 
-	app := &Application{
-		Config:      config.New(configPath),
-		Initializer: &Initializer{},
-		Router:      &endpoints.Router{Service: new(facade.Service)},
-	}
+	appService := new(facade.Service)
+	appConfig := config.New(configPath)
 
-	if router, ok := app.Router.(*endpoints.Router); ok {
-		if err := new(Initializer).Database(app.Config, router.Service.(*facade.Service)); err != nil {
-			log.Errorf("failed to initialize database: %s", err)
-			panicQuit()
-		}
-	} else {
-		log.Errorf("router failed to initialize")
+	if err := new(Initializer).Database(appConfig, appService); err != nil {
+		log.Errorf("failed to initialize database: %s", err)
 		panicQuit()
 	}
 
-	log.Fatal(listenAndServe(app.Config.Port.Value, gziphandler.GzipHandler(
-		routes.Handler{Router: app.Router}.RouteHandler(),
+	log.Fatal(listenAndServe(appConfig.Port.Value, gziphandler.GzipHandler(
+		routes.Handler{Router: &endpoints.Router{Service: appService}}.RouteHandler(),
 	)),
 	)
 }

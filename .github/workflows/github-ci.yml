@@ -1,0 +1,10 @@
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  workflow-ci:
+    runs-on: ubuntu-latest
+    uses: calebtracey/devops/.github/workflows/goAPI.yml@main
