@@ -6,6 +6,7 @@ import (
 	"github.com/jackc/pgx/v5/pgxpool"
 	log "github.com/sirupsen/logrus"
 	"reflect"
+	"strings"
 )
 
 type DAOI interface {
@@ -27,34 +28,39 @@ func (s DAO) ExecContext(ctx context.Context, exec string) (resp *external.ExecR
 	}
 }
 
-type ArgMap map[string]any
+func ParseStructToSlices(obj any) (tags []string, values []string) {
 
-func ParseStructToSlices(obj any) (tags []string, values []any) {
 	obj = dereferencePointer(obj)
-
 	t := reflect.TypeOf(obj)
 	v := reflect.ValueOf(obj)
 
 	numFields := t.NumField()
+	strCount := 0
 
-	tags = make([]string, numFields)
-	values = make([]any, numFields)
+	tags = make([]string, 0)
+	values = make([]string, 0)
 
 	for i := 0; i < numFields; i++ {
+
 		tag := t.Field(i).Tag.Get(DatabaseStructTag)
 		field := v.Field(i)
+
 		if field.IsValid() {
 			switch field.Kind() {
 			case reflect.String:
-				log.Infof("%s: %s", tag, field.String())
-				values[i] = field.String()
-				tags[i] = tag
+				if str := field.String(); str != "" {
+					log.Infof("%s: %s", tag, field.String())
+					values = append(values, wrapInSingleQuotes(field.String()))
+					tags = append(tags, tag)
+					strCount++
+				}
 			default:
-				values[i] = field.Interface()
-				tags[i] = tag
+				//values[i] = ""
+				//tags[i] = tag
 			}
 		}
 	}
+
 	return tags, values
 }
 
@@ -63,6 +69,10 @@ func dereferencePointer(obj any) any {
 		obj = reflect.ValueOf(obj).Elem().Interface()
 	}
 	return obj
+}
+
+func wrapInSingleQuotes(s string) string {
+	return "'" + strings.ReplaceAll(s, "'", "\\'") + "'"
 }
 
 const DatabaseStructTag = "db"

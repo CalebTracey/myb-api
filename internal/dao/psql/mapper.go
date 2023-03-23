@@ -3,6 +3,8 @@ package psql
 import (
 	"fmt"
 	"github.com/calebtracey/mind-your-business-api/external"
+	log "github.com/sirupsen/logrus"
+	"strings"
 )
 
 type MapperI interface {
@@ -13,5 +15,7 @@ type Mapper struct{}
 
 func (m Mapper) PostgresExec(request *external.ApiRequest) string {
 	columns, values := ParseStructToSlices(request.Request.User)
-	return fmt.Sprintf(InsertExec, "users", columns, values)
+	query := fmt.Sprintf(InsertExec, "users", strings.Join(columns, ", "), strings.Join(values, ", "))
+	log.Infof("PostgresExec: query:\n%s\n", query)
+	return query
 }
