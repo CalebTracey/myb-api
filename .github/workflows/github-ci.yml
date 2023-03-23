@@ -8,4 +8,4 @@ on:
 jobs:
   workflow-ci:
     runs-on: ubuntu-latest
-    uses: calebtracey/devops/.github/workflows/goAPI.yml@main
+    uses: calebtracey/devops/.github/workflows/goAPI.yml
