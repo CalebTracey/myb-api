@@ -4,7 +4,6 @@ import (
 	"context"
 	"github.com/calebtracey/mind-your-business-api/external"
 	"github.com/jackc/pgx/v5/pgxpool"
-	log "github.com/sirupsen/logrus"
 	"reflect"
 	"strings"
 )
@@ -21,7 +20,6 @@ func (s DAO) ExecContext(ctx context.Context, exec string) (resp *external.ExecR
 	resp = new(external.ExecResponse)
 
 	if resp.Status, err = s.Pool.Exec(ctx, exec); err != nil {
-		log.Errorf("ExecContext: %v", err)
 		return nil, err
 	} else {
 		return resp, nil
