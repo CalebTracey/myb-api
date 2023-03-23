@@ -9,6 +9,7 @@ on:
 
 jobs:
   build:
+    needs: [analyze, test, golangci]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/setup-go@v4
