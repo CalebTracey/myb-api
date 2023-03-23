@@ -9,18 +9,6 @@ import (
 	"time"
 )
 
-// NewUser route handler for /newUser endpoint
-//
-// @Summary      New User request
-// @Description  request to add new user to the database
-// @Tags         users
-// @Accept       json
-// @Produce      json
-// @Success      200  {object}  http.HandlerFunc
-// @Failure      400  {object}  httputil.HTTPError
-// @Failure      404  {object}  httputil.HTTPError
-// @Failure      500  {object}  httputil.HTTPError
-// @Router       /api/v1/newUser [post]
 func (r *Router) NewUser() http.HandlerFunc {
 	return func(rw http.ResponseWriter, req *http.Request) {
 		sw := time.Now()
