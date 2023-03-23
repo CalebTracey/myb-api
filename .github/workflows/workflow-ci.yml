@@ -7,5 +7,6 @@ on:
 
 jobs:
   workflow-ci:
-    steps:
-      uses: calebtracey/devops/ci/.github/workflows/goAPI.yml
+    name: Go API Workflow CI - Template
+    runs-on: ubuntu-latest
+    uses: calebtracey/devops/ci/.github/workflows/goAPI.yml
