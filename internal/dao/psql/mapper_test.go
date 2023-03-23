@@ -40,8 +40,8 @@ func TestMapper_PostgresExec(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			m := Mapper{}
-			if got := m.PostgresExec(tt.request); got != tt.want {
-				t.Errorf("PostgresExec() = %v, want %v", got, tt.want)
+			if got := m.NewUserExec(tt.request); got != tt.want {
+				t.Errorf("NewUserExec() = %v, want %v", got, tt.want)
 			}
 		})
 	}

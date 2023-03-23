@@ -22,7 +22,7 @@ func (s Service) NewUser(ctx context.Context, apiRequest *external.ApiRequest) *
 	// TODO add request validation
 	// TODO parse params and map request query
 
-	if execResp, execErr := s.PsqlDAO.ExecContext(ctx, s.PsqlMapper.PostgresExec(apiRequest)); execErr != nil {
+	if execResp, execErr := s.PsqlDAO.ExecContext(ctx, s.PsqlMapper.NewUserExec(apiRequest)); execErr != nil {
 		resp.Message.ErrorLog = errorLog(execErr, "NewUser")
 	} else {
 		log.Infoln(execResp.Status)

@@ -28,35 +28,28 @@ func (s DAO) ExecContext(ctx context.Context, exec string) (resp *external.ExecR
 	}
 }
 
-func ParseStructToSlices(obj any) (tags []string, values []string) {
+func ParseStructToSlices(obj any) ([]string, []string) {
+	var tags, values []string
 
 	obj = dereferencePointer(obj)
 	t := reflect.TypeOf(obj)
 	v := reflect.ValueOf(obj)
-
 	numFields := t.NumField()
-	strCount := 0
-
-	tags = make([]string, 0)
-	values = make([]string, 0)
 
 	for i := 0; i < numFields; i++ {
-
-		tag := t.Field(i).Tag.Get(DatabaseStructTag)
+		// 'db' struct tag field = db column name
 		field := v.Field(i)
 
 		if field.IsValid() {
+			tag := t.Field(i).Tag.Get(DatabaseStructTag)
+
 			switch field.Kind() {
 			case reflect.String:
 				if str := field.String(); str != "" {
-					log.Infof("%s: %s", tag, field.String())
-					values = append(values, wrapInSingleQuotes(field.String()))
 					tags = append(tags, tag)
-					strCount++
+					values = append(values, wrapInSingleQuotes(field.String()))
 				}
 			default:
-				//values[i] = ""
-				//tags[i] = tag
 			}
 		}
 	}
